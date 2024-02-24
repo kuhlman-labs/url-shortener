@@ -19,6 +19,7 @@ type SQLURLRepository struct {
 type URLRepository interface {
 	CreateURL(u *URLSchema) error
 	ReadURL(slug string) (*URLSchema, error)
+	ReadURLBySlug(slug string) (*URLSchema, error)
 	UpdateURL(slug string, newLongURL string) error
 	DeleteURL(slug string) error
 }
@@ -46,6 +47,17 @@ func (s *SQLURLRepository) CreateURL(u *URLSchema) error {
 func (s *SQLURLRepository) ReadURL(longURL string) (*URLSchema, error) {
 	var url URLSchema
 	if err := s.db.Where("long_url = ?", longURL).First(&url).Error; err != nil {
+		if gorm.IsRecordNotFoundError(err) {
+			return nil, nil // no error, just no record found
+		}
+		return nil, err
+	}
+	return &url, nil
+}
+
+func (s *SQLURLRepository) ReadURLBySlug(slug string) (*URLSchema, error) {
+	var url URLSchema
+	if err := s.db.Where("slug = ?", slug).First(&url).Error; err != nil {
 		if gorm.IsRecordNotFoundError(err) {
 			return nil, nil // no error, just no record found
 		}
