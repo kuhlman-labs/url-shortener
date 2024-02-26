@@ -1,42 +1,63 @@
-# URL Shortener
+# Go URL Shortener
 
-This is a simple URL shortener written in Go. It provides an API to create short URLs from long URLs and redirects requests from the short URL to the original long URL.
+This project is a URL shortener written in Go. It provides an API to create short URLs from long URLs and redirects requests from the short URL to the original long URL.
 
 ## Features
 
-- URL validation: Checks if the URL is valid and has the correct scheme (http or https).
-- Slug generation: Generates a unique slug for each URL.
-- Redirection: Redirects requests from the short URL to the original long URL.
+- **URL Validation**: Checks if the URL is valid and has the correct scheme (http or https).
+- **Slug Generation**: Generates a unique slug for each URL.
+- **Redirection**: Redirects requests from the short URL to the original long URL.
+- **API**: Provides an API with CRUD operations to create a short url from a given long URL.
+- **Database**: Uses a SQLite database to store the long URL and slug.
+- **Web Interface**: Provides a simple web interface to create short URLs from long URLs.
+- **Tests**: Includes unit tests for the service, handler, and database.
+
+## Running Locally
+
+To run this project locally, follow these steps:
+
+1. Clone the repository to your local machine:
+
+```bash
+git clone https://github.com/yourusername/urlshortener.git
+```
+
+2. Navigate to the project directory:
+
+```bash
+cd urlshortener
+```
+
+3. Run the project:
+
+```bash
+go run main.go
+```
+
+The URL shortener will start on port 8080. You can access the APIs at `http://localhost:8080/api`. You can also access the web interface at `http://localhost:8080/app`.
 
 ## Usage
 
-### Generate Short URL
+### Using the API
 
-To generate a short URL, call the `GenerateShortURL` function with the long URL as an argument. This function will validate the URL, generate a unique slug, and return a `URL` struct with the long URL, short URL, and slug.
-
-```go
-u, err := GenerateShortURL("http://example.com")
-if err != nil {
-    log.Fatal(err)
-}
-fmt.Println(u.ShortURL) // Outputs: http://localhost:8080/abc123
-```
-
-### Redirection
-
-To redirect requests from the short URL to the original long URL, use the `URLHandler` function. This function will look up the slug in the URL, find the corresponding long URL in the database, and redirect to the long URL.
-
-```go
-http.HandleFunc("/", URLHandler)
-http.ListenAndServe(":8080", nil)
-```
-
-## Installation
-
-To install this package, run the following command:
-
+#### GET
 ```bash
-go get github.com/kuhlman-labs/urlshortener
+curl -X GET "http://localhost:8080/api" -H "Content-Type: application/json" -d '{"url": "http://example.com"}'
+```
+
+#### POST
+```bash
+curl -X POST "http://localhost:8080/api" -H "Content-Type: application/json" -d '{"url": "http://example.com"}'
+```
+
+#### PUT
+```bash
+curl -X PUT "http://localhost:8080/api" -H "Content-Type: application/json" -d '{"url": "http://example.com", "new_url": "http://example2.com"}'
+```    
+
+#### DELETE
+```bash    
+curl -X DELETE "http://localhost:8080/api" -H "Content-Type: application/json" -d '{"url": "http://example.com"}'
 ```
 
 ## Contributing
