@@ -5,6 +5,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
+// URLSchema is a struct that represents the schema of the URL table in the database
 type URLSchema struct {
 	gorm.Model
 	Slug     string `gorm:"type:varchar(100);unique_index"`
@@ -12,10 +13,12 @@ type URLSchema struct {
 	LongUrl  string `gorm:"type:varchar(100);unique_index"`
 }
 
+// SQLURLRepository is a struct that represents the SQL URL repository
 type SQLURLRepository struct {
 	db *gorm.DB
 }
 
+// URLRepository is an interface that represents the URL repository
 type URLRepository interface {
 	CreateURL(u *URLSchema) error
 	ReadURL(slug string) (*URLSchema, error)
@@ -71,6 +74,7 @@ func (s *SQLURLRepository) UpdateURL(longURL string, newLongURL string) error {
 	if err := s.db.Model(&url).Where("long_url = ?", longURL).Update("long_url", newLongURL).Error; err != nil {
 		return err
 	}
+
 	return nil
 }
 
