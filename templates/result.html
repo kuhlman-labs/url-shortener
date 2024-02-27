@@ -3,8 +3,32 @@
 <html>
 <head>
     <title>Shortened URL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        p {
+            font-size: 20px;
+        }
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <p>Your shortened URL is: <a href="{{.}}">{{.}}</a></p>
+    <div class="container">
+        <p>Your shortened URL is: <a href="{{.}}">{{.}}</a></p>
+    </div>
 </body>
 </html>

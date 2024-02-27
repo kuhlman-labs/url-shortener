@@ -3,12 +3,50 @@
 <html>
 <head>
     <title>URL Shortener</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .form-container {
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; /* Add this line */
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; /* Add this line */
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <form action="/shorten" method="POST">
-        <label for="url">URL:</label><br>
-        <input type="text" id="url" name="url"><br>
-        <input type="submit" value="Submit">
-    </form>
+    <div class="form-container">
+        <form action="/shorten" method="POST">
+            <label for="url">URL:</label>
+            <input type="text" id="url" name="url">
+            <input type="submit" value="Submit">
+        </form>
+    </div>
 </body>
 </html>

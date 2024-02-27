@@ -71,6 +71,27 @@ func shortenHandler(db URLRepository, templatePath string) http.HandlerFunc {
 			LongURL: longURL,
 		}
 
+		// Check if the URL is already in the database
+		query, err := db.ReadURL(longURL)
+		if err != nil {
+			http.Error(w, "Error reading URL", http.StatusInternalServerError)
+			return
+		}
+
+		if query != nil {
+			tmpl := template.Must(template.ParseFiles(templatePath + "result.html"))
+			if err != nil {
+				http.Error(w, "Error loading the template", http.StatusInternalServerError)
+				return
+			}
+			err = tmpl.Execute(w, query.ShortUrl)
+			if err != nil {
+				http.Error(w, "Error executing template", http.StatusInternalServerError)
+				return
+			}
+			return
+		}
+
 		shortURL, err := url.GenerateShortURL(longURL)
 		if err != nil {
 			http.Error(w, "Error generating short URL", http.StatusInternalServerError)
