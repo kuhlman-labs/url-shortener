@@ -115,6 +115,7 @@ func TestShortenHandler(t *testing.T) {
 
 	// Set up the expectation
 	repo.On("CreateURL", mock.Anything).Return(nil)
+	repo.On("ReadURL", "http://example.com").Return(nil, nil)
 
 	// Create a new HTTP request with form data
 	form := url.Values{}
@@ -137,6 +138,32 @@ func TestShortenHandler(t *testing.T) {
 	// Assert that the expectations were met
 	repo.AssertExpectations(t)
 
+	// Test the case where the URL is already in the database
+	// Set up the expectation
+
+	repo.On("ReadURL", "http://example.com").Return(&URLSchema{
+		LongUrl:  "http://example.com",
+		ShortUrl: "http://short.com"}, nil)
+
+	// Create a new HTTP request with form data
+	form = url.Values{}
+	form.Add("url", "http://example.com")
+	req = httptest.NewRequest("POST", "/shorten", strings.NewReader(form.Encode()))
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+	// Create a new response recorder
+	rr = httptest.NewRecorder()
+
+	// Create the handler
+	handler = shortenHandler(repo, "../templates/")
+	// Serve the HTTP request
+	handler.ServeHTTP(rr, req)
+
+	// Check the status code
+	assert.Equal(t, http.StatusOK, rr.Code)
+
+	// Assert that the expectations were met
+	repo.AssertExpectations(t)
 }
 
 func Test_Api_Get(t *testing.T) {
